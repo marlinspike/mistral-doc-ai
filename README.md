@@ -34,6 +34,14 @@ If you want a turnkey OCR + structured extraction path with minimal prompt fuss,
 - Download Markdown or PDF (client-side render).
 - Light/dark theme with Tailwind styling.
 
+## UI preview
+![Doc AI Studio UI](img/studio-1.png)
+
+What’s on screen:
+- Upload panel: drag/drop or browse, shows queued files with size/type and per-file removal, plus clear-all.
+- Controls: combine vs per-file toggle, Run OCR button, inline error hints, and a light/dark theme toggle in the header.
+- Output panel: rendered Markdown vs raw text toggle; combined view with Markdown/PDF downloads; per-file cards when combine is off, each with its own downloads and error state.
+
 ## Tech stack
 - Backend: FastAPI, httpx (async), pydantic-settings.
 - Frontend: React + Vite + TypeScript + Tailwind, react-markdown, html2pdf.js.
