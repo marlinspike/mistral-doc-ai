@@ -11,6 +11,19 @@ Example FastAPI + React app that shows how to run Mistral Document AI (Azure Fou
 - Typical request limit shown in the portal: 60 requests per minute (adjust your backoff if needed).
 - Supported languages: see the model catalog for the current list (multilingual OCR, Latin scripts and more). If you rely on a specific language, confirm in the catalog and validate with a sample doc.
 
+### Why this model (quick comparison)
+I built this repo because mistral-document-ai-2505 gives high-quality OCR and structured extraction out of the box. Here is a simple comparison for the common use cases I care about:
+
+| Use case | Mistral Document AI 2505 | Legacy OCR (e.g., Tesseract) | Generic LLM w/ vision |
+| --- | --- | --- | --- |
+| Handwritten notes | Strong accuracy, handles messy handwriting better than classic OCR | Often misses strokes, weak on messy handwriting | Can read images but needs image uploads and prompt tuning |
+| PDFs with mixed content | Reads text, handles multi-page; schema extraction available | Text-only, layout-aware but no schema extraction | Needs prompt engineering, higher latency |
+| Schema/fields extraction | Built-in JSON schema via `document_annotation_format` or `bbox_annotation_format` | Not supported | Requires manual parsing of model output |
+| API shape | Simple REST (data URL payload) with JSON | Simple text/image OCR only | Varies by provider; usually chat/completions style |
+| Output quality | Returns clean text, page-level content, optional markdown | Raw text, little structure | Depends on prompt and provider limits |
+
+If you want a turnkey OCR + structured extraction path with minimal prompt fuss, this model is a solid fit.
+
 ## What this app does
 - Upload up to 10 files (PDF, PNG, JPG, JPEG), 5MB max each.
 - Parallel OCR with retry/backoff to respect rate limits.
