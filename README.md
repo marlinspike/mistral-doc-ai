@@ -2,6 +2,8 @@
 
 Example FastAPI + React app that shows how to run Mistral Document AI (Azure Foundry deployment) on PDFs and images, then view or download the extracted text.
 
+This demo is built around Microsoft Foundry, where you can deploy the Mistral OCR model used here. Deploy the **mistral-document-ai-2505** model from the Foundry model catalog (https://ai.azure.com/catalog/models/mistral-document-ai-2505) and grab the endpoint + key from your deployment page. The API here expects the Foundry OCR-style endpoint (`/providers/mistral/azure/ocr`) and key.
+
 ## What the model does (mistral-document-ai-2505)
 - Model card: https://ai.azure.com/catalog/models/mistral-document-ai-2505
 - OCR for PDFs and images (expects base64 data URLs in the request).
@@ -58,6 +60,7 @@ VITE_API_BASE_URL=http://localhost:8001
 ```
 
 If the endpoint only accepts one header style, set `AUTH_HEADER_STYLE` to `api-key` or `bearer` accordingly.
+If you deploy your own model instance in Foundry, update `AZURE_OCR_ENDPOINT` and `AZURE_API_KEY` to your deployment values.
 
 ## Run the API (dev)
 ```bash
