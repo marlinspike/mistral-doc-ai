@@ -24,6 +24,7 @@ RETRYABLE_STATUS = {429, 500, 502, 503, 504}
 
 
 def normalize_mime_type(content_type: Optional[str], filename: Optional[str]) -> Optional[str]:
+    """Return a normalized MIME type if supported, otherwise None."""
     if content_type:
         base = content_type.split(";")[0].strip().lower()
         if base in ALLOWED_MIME_TYPES:
@@ -36,11 +37,13 @@ def normalize_mime_type(content_type: Optional[str], filename: Optional[str]) ->
 
 
 def build_data_url(mime_type: str, data: bytes) -> str:
+    """Encode binary data as a base64 data URL."""
     encoded = base64.b64encode(data).decode("ascii")
     return f"data:{mime_type};base64,{encoded}"
 
 
 def build_payload(data_url: str, mime_type: str) -> Dict[str, Any]:
+    """Build the OCR request payload for PDF vs image inputs."""
     is_pdf = mime_type == "application/pdf"
     document_key = "document_url" if is_pdf else "image_url"
     return {
@@ -54,6 +57,7 @@ def build_payload(data_url: str, mime_type: str) -> Dict[str, Any]:
 
 
 async def process_uploads(files: List[UploadFile]) -> List[Dict[str, Any]]:
+    """Process a list of uploads in parallel with bounded concurrency."""
     semaphore = asyncio.Semaphore(settings.max_concurrency)
     async with httpx.AsyncClient(timeout=settings.request_timeout_s) as client:
         tasks = [
@@ -63,11 +67,8 @@ async def process_uploads(files: List[UploadFile]) -> List[Dict[str, Any]]:
         return await asyncio.gather(*tasks)
 
 
-async def _process_single(
-    file: UploadFile,
-    client: httpx.AsyncClient,
-    semaphore: asyncio.Semaphore,
-) -> Dict[str, Any]:
+async def _process_single(file: UploadFile, client: httpx.AsyncClient, semaphore: asyncio.Semaphore) -> Dict[str, Any]:
+    """Validate, encode, send one file to OCR, and parse the response."""
     result: Dict[str, Any] = {
         "id": uuid4().hex,
         "filename": file.filename or "unnamed",
@@ -104,6 +105,7 @@ async def _process_single(
 
 
 async def _post_with_backoff(client: httpx.AsyncClient, payload: Dict[str, Any]) -> Dict[str, Any]:
+    """POST to the OCR endpoint with retry/backoff on retryable statuses."""
     headers = _build_headers()
 
     last_exc: Optional[Exception] = None
@@ -130,12 +132,14 @@ async def _post_with_backoff(client: httpx.AsyncClient, payload: Dict[str, Any])
 
 
 def _backoff_delay(attempt: int) -> float:
+    """Compute exponential backoff with jitter."""
     base = 0.7 * (2 ** (attempt - 1))
     jitter = random.uniform(0, 0.4)
     return min(base + jitter, 6.0)
 
 
 def _build_headers() -> Dict[str, str]:
+    """Construct auth headers based on configured style."""
     style = settings.auth_header_style.lower()
     key = settings.azure_api_key
 

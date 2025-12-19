@@ -19,11 +19,13 @@ app.add_middleware(
 
 @app.get("/api/health")
 async def health() -> dict:
+    """Liveness probe endpoint."""
     return {"status": "ok"}
 
 
 @app.post("/api/ocr")
 async def ocr(files: list[UploadFile] = File(...)) -> dict:
+    """Accept multiple files, forward to OCR, and return parsed results."""
     if not files:
         raise HTTPException(status_code=400, detail="No files uploaded.")
     if len(files) > settings.max_files:

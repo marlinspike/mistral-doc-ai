@@ -22,6 +22,7 @@ SKIP_KEYWORDS = ("base64", "image", "bbox", "coordinates", "polygon")
 
 
 def extract_text_and_markdown(payload: Any) -> tuple[str, str]:
+    """Extract best-effort text and markdown strings from a model payload."""
     markdown = _first_path_match(payload, PREFERRED_MARKDOWN_PATHS)
     text = _first_path_match(payload, PREFERRED_TEXT_PATHS)
 
@@ -42,6 +43,7 @@ def extract_text_and_markdown(payload: Any) -> tuple[str, str]:
 
 
 def _first_path_match(payload: Any, paths: Sequence[Tuple[str, ...]]) -> Optional[str]:
+    """Return the first non-empty string found by walking known paths."""
     for path in paths:
         value = _get_path(payload, path)
         if isinstance(value, str) and value.strip():
@@ -50,6 +52,7 @@ def _first_path_match(payload: Any, paths: Sequence[Tuple[str, ...]]) -> Optiona
 
 
 def _get_path(payload: Any, path: Tuple[str, ...]) -> Any:
+    """Traverse nested dicts by a sequence of keys."""
     current = payload
     for key in path:
         if not isinstance(current, dict) or key not in current:
@@ -59,6 +62,7 @@ def _get_path(payload: Any, path: Tuple[str, ...]) -> Any:
 
 
 def _extract_pages(payload: Any) -> Optional[str]:
+    """Concatenate page-level text/content/markdown fields if present."""
     pages = None
     if isinstance(payload, dict):
         pages = payload.get("pages") or payload.get("document", {}).get("pages")
@@ -80,11 +84,13 @@ def _extract_pages(payload: Any) -> Optional[str]:
 
 
 def _fallback_collect_text(payload: Any) -> str:
+    """Collect all string leaves (minus base64/image/bbox-related keys)."""
     strings = [s.strip() for s in _collect_strings(payload) if s.strip()]
     return "\n\n".join(strings)
 
 
 def _collect_strings(payload: Any, parent_key: str = "") -> Iterable[str]:
+    """Yield string leaves, skipping base64-like content and ignored keys."""
     if isinstance(payload, dict):
         for key, value in payload.items():
             if _should_skip_key(key):
@@ -100,11 +106,13 @@ def _collect_strings(payload: Any, parent_key: str = "") -> Iterable[str]:
 
 
 def _should_skip_key(key: str) -> bool:
+    """Return True if a key suggests image/base64 or bbox fields we want to skip."""
     lowered = key.lower()
     return any(token in lowered for token in SKIP_KEYWORDS)
 
 
 def _looks_like_base64(value: str) -> bool:
+    """Heuristic to avoid emitting large base64 blobs as text."""
     if len(value) < 200:
         return False
     allowed = set(string.ascii_letters + string.digits + "+/=\n")

@@ -7,6 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    """Application settings loaded from environment variables."""
     azure_ocr_endpoint: str
     azure_api_key: str
     mistral_model: str = "mistral-document-ai-2505"
@@ -25,10 +26,12 @@ class Settings(BaseSettings):
 
     @property
     def max_file_size_bytes(self) -> int:
+        """Max file size in bytes."""
         return self.max_file_size_mb * 1024 * 1024
 
     @property
     def cors_origin_list(self) -> List[str]:
+        """CORS origins parsed into a list."""
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
 
