@@ -1,0 +1,34 @@
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+.coverage
+.ipynb_checkpoints/
+.python-version
+
+# Node
+node_modules/
+dist/
+
+# OS
+.DS_Store
+.AppleDouble
+.Spotlight-V100
+.Trashes
+
+# VSCode
+.vscode/
+*.code-workspace

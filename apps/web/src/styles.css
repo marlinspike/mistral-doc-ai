@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f5f1ea;
+  --bg-accent: #efe7dd;
+  --surface: rgba(255, 255, 255, 0.85);
+  --surface-strong: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --accent: #b85c38;
+  --accent-2: #1f6f78;
+  --border: #e5dacb;
+  --ring: rgba(184, 92, 56, 0.35);
+  --shadow: 0 24px 70px -50px rgba(15, 23, 42, 0.45);
+}
+
+.dark {
+  --bg: #0b0f14;
+  --bg-accent: #101821;
+  --surface: rgba(17, 24, 35, 0.78);
+  --surface-strong: #111823;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #f59e0b;
+  --accent-2: #2dd4bf;
+  --border: #223042;
+  --ring: rgba(245, 158, 11, 0.3);
+  --shadow: 0 28px 80px -55px rgba(0, 0, 0, 0.8);
+}
+
+body {
+  font-family: "Manrope", sans-serif;
+  background:
+    radial-gradient(900px circle at 15% -10%, rgba(184, 92, 56, 0.12), transparent 60%),
+    radial-gradient(700px circle at 90% 10%, rgba(31, 111, 120, 0.12), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg-accent));
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.dark body {
+  background:
+    radial-gradient(900px circle at 15% -10%, rgba(245, 158, 11, 0.12), transparent 60%),
+    radial-gradient(700px circle at 90% 10%, rgba(45, 212, 191, 0.12), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg-accent));
+}
+
+.title-font {
+  font-family: "Fraunces", serif;
+}
+
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.output-surface {
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+}
+
+.print-surface {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  width: 900px;
+  padding: 32px;
+  background: #ffffff;
+  color: #111827;
+  --text: #111827;
+  --muted: #4b5563;
+  --border: #e5e7eb;
+  --accent-2: #0f766e;
+}
+
+.prose {
+  max-width: none;
+}
+
+.prose :where(h1, h2, h3) {
+  font-family: "Fraunces", serif;
+}
+
+.prose {
+  --tw-prose-body: var(--text);
+  --tw-prose-headings: var(--text);
+  --tw-prose-links: var(--accent-2);
+  --tw-prose-bold: var(--text);
+  --tw-prose-bullets: var(--muted);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--text);
+  --tw-prose-quote-borders: var(--border);
+  --tw-prose-captions: var(--muted);
+  --tw-prose-code: var(--accent-2);
+  --tw-prose-pre-code: var(--text);
+  --tw-prose-pre-bg: rgba(15, 23, 42, 0.08);
+}
+
+.dark .prose {
+  --tw-prose-body: var(--text);
+  --tw-prose-headings: var(--text);
+  --tw-prose-links: var(--accent-2);
+  --tw-prose-bold: var(--text);
+  --tw-prose-bullets: var(--muted);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--text);
+  --tw-prose-quote-borders: var(--border);
+  --tw-prose-captions: var(--muted);
+  --tw-prose-code: var(--accent-2);
+  --tw-prose-pre-code: var(--text);
+  --tw-prose-pre-bg: rgba(15, 23, 42, 0.4);
+}
